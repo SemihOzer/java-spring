@@ -3,6 +3,8 @@ package com.example.rentACar.entities.concretes;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Table(name = "brands")
 @Getter
 @Setter
@@ -18,6 +20,9 @@ public class Brand {
 
     @Column(name="name")
     private String name;
+
+    @OneToMany(mappedBy = "brand")
+    private List<Model> models;
 
 
 }

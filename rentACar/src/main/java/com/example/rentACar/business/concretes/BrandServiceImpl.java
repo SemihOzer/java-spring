@@ -4,13 +4,16 @@ import com.example.rentACar.business.abstracts.BrandService;
 import com.example.rentACar.business.requests.CreateBrandRequest;
 import com.example.rentACar.business.requests.UpdateBrandRequest;
 import com.example.rentACar.business.responses.GetAllBrandsResponse;
+import com.example.rentACar.business.responses.GetAllModelsResponse;
 import com.example.rentACar.business.responses.GetByIdBrandResponse;
 import com.example.rentACar.core.utilities.mappers.ModelMapperService;
 import com.example.rentACar.dataAccess.abstracts.BrandRepository;
 import com.example.rentACar.entities.concretes.Brand;
+import com.example.rentACar.entities.concretes.Model;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -59,4 +62,6 @@ public class BrandServiceImpl implements BrandService {
     public void delete(int id) {
         this.brandRepository.deleteById(id);
     }
+
+
 }
