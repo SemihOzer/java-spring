@@ -1,10 +1,8 @@
 package com.semihozer.in28MinutesTutorial.socialMedia.dataAccsess;
 
 import com.semihozer.in28MinutesTutorial.socialMedia.entities.User;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
-import java.sql.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +33,12 @@ public class UserDaoService {
 
     public User findById(int id){
         Predicate<? super User> predicate = user -> user.getId().equals(id);
-        return users.stream().filter(predicate).findFirst().get();
+        return users.stream().filter(predicate).findFirst().orElse(null);
+    }
+
+    public void deleteUser(int id){
+        Predicate<? super User> predicate = user -> user.getId().equals(id);
+        users.removeIf(predicate);
     }
 
 }

@@ -2,6 +2,8 @@ package com.semihozer.in28MinutesTutorial.socialMedia.controllers;
 
 import com.semihozer.in28MinutesTutorial.socialMedia.dataAccsess.UserDaoService;
 import com.semihozer.in28MinutesTutorial.socialMedia.entities.User;
+import com.semihozer.in28MinutesTutorial.socialMedia.exceptions.UserNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,16 +26,28 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public User findById(@PathVariable int id){
-        return userDaoService.findById(id);
+
+        User user = userDaoService.findById(id);
+
+        if(user == null)
+            throw new UserNotFoundException("id:" + id);
+
+        return user;
     }
 
     @PostMapping("/users")
-    public ResponseEntity<Object> createUser(@RequestBody User user){
+    public ResponseEntity<Object> createUser(@Valid @RequestBody User user){
         userDaoService.save(user);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteUser(@PathVariable int id){
+
+        userDaoService.deleteUser(id);
     }
 
 
