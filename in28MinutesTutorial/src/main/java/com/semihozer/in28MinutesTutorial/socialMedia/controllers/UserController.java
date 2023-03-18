@@ -5,12 +5,16 @@ import com.semihozer.in28MinutesTutorial.socialMedia.entities.User;
 import com.semihozer.in28MinutesTutorial.socialMedia.exceptions.UserNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @AllArgsConstructor
@@ -25,14 +29,20 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public User findById(@PathVariable int id){
+    public EntityModel<User> findById(@PathVariable int id){
 
         User user = userDaoService.findById(id);
 
         if(user == null)
             throw new UserNotFoundException("id:" + id);
 
-        return user;
+        EntityModel<User> entityModel = EntityModel.of(user);
+
+        WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).getAllUsers());
+
+        entityModel.add(link.withRel("all-users"));
+
+        return entityModel;
     }
 
     @PostMapping("/users")
